@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package cmd
+package ranking_system
 
 import (
 	"fmt"
@@ -21,6 +21,7 @@ import (
 	"os"
 
 	"github.com/SelferRy/ranking_system/internal/config"
+	intLogger "github.com/SelferRy/ranking_system/internal/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -53,6 +54,12 @@ The microservice sends click and impression events to a queue (Kafka) for furthe
 	Run: func(cmd *cobra.Command, args []string) {
 		//_ = cfg  // TODO: make body that will use cfg
 		fmt.Println(cfg)
+		fmt.Println(cfg.Logger.Level, cfg.Logger.OutputPaths, cfg.Logger.ErrorOutputPaths)
+		logger, err := intLogger.New(&cfg.Logger)
+		if err != nil {
+			log.Fatal("logger didn't initialize.\n", err)
+		}
+		logger.Info("some")
 	},
 }
 

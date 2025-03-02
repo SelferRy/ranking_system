@@ -15,8 +15,10 @@ limitations under the License.
 */
 package main
 
-import "github.com/SelferRy/ranking_system/cmd"
+import (
+	"github.com/SelferRy/ranking_system/internal/cmd/ranking_system"
+)
 
 func main() {
-	cmd.Execute()
+	ranking_system.Execute()
 }

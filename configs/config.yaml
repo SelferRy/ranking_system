@@ -1,2 +1,9 @@
-test: 1
-one: some
+log:
+  level: "DEBUG"
+  out_paths:
+    - "stdout"
+  error_output_paths:
+    - "stderr"
+
+test: some
+one: 1
