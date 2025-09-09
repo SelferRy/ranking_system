@@ -1,3 +1,4 @@
+```mermaid
 flowchart LR
 subgraph Domain (чистая доменная модель)
 E[entity/*]
@@ -26,3 +27,4 @@ U -->|depends on| R
 U --> S
 U --> MQ
 DB -.implements .-> R
+```
