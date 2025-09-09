@@ -16,7 +16,7 @@ limitations under the License.
 package main
 
 import (
-	"github.com/SelferRy/ranking_system/internal/cmd/ranking_system"
+	"github.com/SelferRy/ranking_system/internal/app/cli/ranking_system"
 )
 
 func main() {

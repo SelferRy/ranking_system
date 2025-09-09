@@ -16,12 +16,18 @@ limitations under the License.
 package ranking_system
 
 import (
+	"context"
 	"fmt"
+	"go.uber.org/zap"
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
+	"github.com/SelferRy/ranking_system/internal/app"
 	"github.com/SelferRy/ranking_system/internal/config"
-	intLogger "github.com/SelferRy/ranking_system/internal/logger"
+	"github.com/SelferRy/ranking_system/internal/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -51,15 +57,65 @@ The microservice sends click and impression events to a queue (Kafka) for furthe
 `,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		//_ = cfg  // TODO: make body that will use cfg
 		fmt.Println(cfg)
 		fmt.Println(cfg.Logger.Level, cfg.Logger.OutputPaths, cfg.Logger.ErrorOutputPaths)
-		logger, err := intLogger.New(&cfg.Logger)
+		logg, err := logger.New(cfg.Logger)
 		if err != nil {
-			log.Fatal("logger didn't initialize.\n", err)
+			logg = logger.NewDefault()
 		}
-		logger.Info("some")
+		logg.Info("some")
+
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		app, err := app.New(ctx, *cfg, logg)
+		if err != nil {
+			return fmt.Errorf("app initialization problem: %w", err)
+		}
+
+		//// goroutine to running the ranking system
+		//go func() {
+		//	if err := app.Start(); err != nil {
+		//		logg.Error("app.Start() problem", zap.Error(err))
+		//	}
+		//}()
+
+		// goroutine to complete the ranking system
+		go func() {
+			signals := make(chan os.Signal, 1)
+			signal.Notify(signals, syscall.SIGQUIT|syscall.SIGTERM)
+			select {
+			case s := <-signals:
+				logg.Info("A signal was received:", zap.Stringer("signal", s)) // zap.Reflect("0", s)
+				cancel()
+			case <-ctx.Done():
+			}
+			signal.Stop(signals)
+			if err := app.Stop(); err != nil {
+				logg.Error("app.Stop() was executed.", zap.Error(err))
+			}
+		}()
+
+		return app.Start()
+
+		//storage := app.GetEventUseCase(cfg.Storage) // database.New()
+		//err = storage.Connect()                     // TODO: stay here or encapsulate??
+		//// TODO: add stream as kafka cursor?
+		//rotator := app.New(logg, storage)
+		//server := internalserver.New(logg, rotator, cfg.Server)
+		//
+		//go func() {
+		//	if err := server.Start(ctx); err != nil {
+		//		logg.Error("server was failed: ", err.Error())
+		//		cancel()
+		//	}
+		//}()
+		//
+		//defer storage.Close()
+		//defer server.Stop()
+		//<-ctx.Done()
 	},
 }
 

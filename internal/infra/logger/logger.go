@@ -3,6 +3,12 @@ package logger
 import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"log"
+)
+
+var (
+	Int64 = zap.Int64
+	Error = zap.Error
 )
 
 type Config struct {
@@ -38,7 +44,7 @@ func (l *logger) Debug(msg string, fields ...zapcore.Field) {
 	l.log.Debug(msg, fields...)
 }
 
-func New(conf *Config) (Logger, error) {
+func New(conf Config) (Logger, error) {
 	logLevel, err := zap.ParseAtomicLevel(conf.Level)
 	if err != nil {
 		return nil, err
@@ -56,4 +62,19 @@ func New(conf *Config) (Logger, error) {
 		return nil, err
 	}
 	return &logger{log: zapLogger}, nil
+}
+
+func NewDefault() Logger {
+	logg, err := New(
+		Config{
+			Level:            "INFO",
+			OutputPaths:      []string{"stdout"},
+			ErrorOutputPaths: []string{"stderr"},
+		},
+	)
+	if err != nil {
+		log.Fatal("default logger was failed. Happens something critical.")
+	}
+	logg.Info("a default logger was initialized.")
+	return logg
 }
