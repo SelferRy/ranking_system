@@ -6,8 +6,8 @@ import (
 )
 
 type BannerRepository interface {
-	GetForSlot(ctx context.Context, slotID int64) ([]entity.Banner, error)
-	AddToSlot(ctx context.Context, slotID, bannerID int64) error
-	RemoveFromSlot(ctx context.Context, slotID, bannerID int64) error
-	ExistsInSlot(ctx context.Context, slotID, bannerID int64) (bool, error)
+	GetForSlot(ctx context.Context, slotID entity.SlotID) ([]entity.Banner, error)
+	AddToSlot(ctx context.Context, slotID entity.SlotID, bannerID entity.BannerID) error
+	RemoveFromSlot(ctx context.Context, slotID entity.SlotID, bannerID entity.BannerID) error
+	ExistsInSlot(ctx context.Context, slotID entity.SlotID, bannerID entity.BannerID) (bool, error)
 }
