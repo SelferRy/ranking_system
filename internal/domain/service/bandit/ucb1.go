@@ -1,6 +1,7 @@
 package bandit
 
 import (
+	"fmt"
 	"github.com/SelferRy/ranking_system/internal/domain/entity"
 	"math"
 )
@@ -16,6 +17,9 @@ func NewUCB1Service() BannerSelector {
 }
 
 func (s ucb1Selector) SelectBanner(stats []entity.BannerStat) (entity.BannerID, error) {
+	if len(stats) == 0 {
+		return 0, fmt.Errorf("banner not found")
+	}
 	totalShows := calculateTotalShows(stats)
 
 	var (
