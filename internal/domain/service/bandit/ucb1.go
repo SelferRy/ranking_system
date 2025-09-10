@@ -6,7 +6,7 @@ import (
 )
 
 type BannerSelector interface {
-	SelectBanner(stats []entity.BannerStat) (int64, error)
+	SelectBanner(stats []entity.BannerStat) (entity.BannerID, error)
 }
 
 type ucb1Selector struct{}
@@ -15,12 +15,12 @@ func NewUCB1Service() BannerSelector {
 	return &ucb1Selector{}
 }
 
-func (s ucb1Selector) SelectBanner(stats []entity.BannerStat) (int64, error) {
+func (s ucb1Selector) SelectBanner(stats []entity.BannerStat) (entity.BannerID, error) {
 	totalShows := calculateTotalShows(stats)
 
 	var (
 		maxScore float64 = -1
-		selectId int64
+		selectId entity.BannerID
 	)
 
 	for _, stat := range stats {
@@ -35,20 +35,21 @@ func (s ucb1Selector) SelectBanner(stats []entity.BannerStat) (int64, error) {
 }
 
 func (s ucb1Selector) calculateScore(stat entity.BannerStat, totalShows int64) float64 {
-	if stat.Shows == 0 {
+	if stat.Impressions == 0 {
 		return math.Inf(1) // choose it 100% in the case
 	}
-	ctr := float64(stat.Clicks) / float64(stat.Shows)
-	return ctr + math.Sqrt(2*math.Log(float64(totalShows))/float64(stat.Shows))
+	//ctr := stat.CTR.Value()
+	ctr, err := entity.NewCTR(stat.Impressions, stat.Clicks)
+	if err != nil {
+		return math.Inf(1)
+	}
+	return ctr.Value() + math.Sqrt(2*math.Log(float64(totalShows))/float64(stat.Impressions))
 }
 
 func calculateTotalShows(stats []entity.BannerStat) int64 {
 	var total int64 = 0
 	for _, stat := range stats {
-		total += stat.Shows
+		total += stat.Impressions
 	}
 	return total
 }
-
-// TODO: пробежаться по типам в entity и изменить с int64 на int где это избыточно - чтобы показать,
-//  что понятно зачем использую int64. Это демо проект. Нагрузка не будет большой. Важна именно демонстрация навыков.

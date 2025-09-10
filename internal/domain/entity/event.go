@@ -11,8 +11,8 @@ type RotationEvent struct {
 }
 
 //func (bs BannerStat) CTR() float64 {
-//	if bs.Shows == 0 {
+//	if bs.Impressions == 0 {
 //		return 0
 //	}
-//	return float64(bs.Shows) / float64(bs.Clicks)
+//	return float64(bs.Impressions) / float64(bs.Clicks)
 //}
