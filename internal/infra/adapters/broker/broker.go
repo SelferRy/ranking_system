@@ -6,5 +6,5 @@ import (
 )
 
 type EventProducer interface {
-	SendEvent(ctx context.Context, event entity.RotationEvent) error
+	Send(ctx context.Context, event entity.DomainEvent) error
 }

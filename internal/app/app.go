@@ -35,7 +35,7 @@ func New(ctx context.Context, conf config.Config, logger logger.Logger) (*App, e
 		return nil, fmt.Errorf("message broker gateway initialization problem: %w", err)
 	}
 
-	useCase, err := ucbanner.New(logger, repo, broker)
+	useCase, err := ucbanner.NewDeliveryUseCase(logger, repo, broker)
 	if err != nil {
 		return nil, fmt.Errorf("use case initialization problem: %w", err)
 	}
