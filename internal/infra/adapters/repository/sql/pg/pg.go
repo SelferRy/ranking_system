@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/SelferRy/ranking_system/internal/infra/adapters/repository"
-	"github.com/SelferRy/ranking_system/internal/logger"
+	"github.com/SelferRy/ranking_system/internal/infra/logger"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"log"

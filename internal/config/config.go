@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/SelferRy/ranking_system/internal/infra/adapters/repository"
-	"github.com/SelferRy/ranking_system/internal/logger"
+	"github.com/SelferRy/ranking_system/internal/infra/logger"
 	server "github.com/SelferRy/ranking_system/internal/server/grpc"
 )
 

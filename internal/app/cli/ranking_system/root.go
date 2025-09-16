@@ -27,7 +27,7 @@ import (
 
 	"github.com/SelferRy/ranking_system/internal/app"
 	"github.com/SelferRy/ranking_system/internal/config"
-	"github.com/SelferRy/ranking_system/internal/logger"
+	"github.com/SelferRy/ranking_system/internal/infra/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

@@ -3,6 +3,7 @@ module github.com/SelferRy/ranking_system
 go 1.24.1
 
 require (
+	github.com/golang/mock v1.6.0
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/lib/pq v1.10.9
 	github.com/spf13/cobra v1.9.1
