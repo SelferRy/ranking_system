@@ -1,7 +1,10 @@
 package gateway
 
-import "github.com/SelferRy/ranking_system/internal/domain/entity"
+import (
+	"context"
+	"github.com/SelferRy/ranking_system/internal/domain/entity"
+)
 
 type EventProducer interface {
-	Send(event entity.DomainEvent) error
+	Send(ctx context.Context, event entity.DomainEvent) error
 }
