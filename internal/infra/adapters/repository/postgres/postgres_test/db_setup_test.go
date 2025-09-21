@@ -2,8 +2,6 @@ package postgres_test
 
 import (
 	"context"
-	"fmt"
-	"github.com/SelferRy/ranking_system/internal/infra/adapters/repository/postgres"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/require"
@@ -28,14 +26,7 @@ func setupTestTx(t *testing.T, pool *pgxpool.Pool) pgx.Tx {
 	return tx
 }
 
-func TestBannerRepository(t *testing.T) {
-	pool := setupTestDB(t)
-
-	tx := setupTestTx(t, pool)
-	repo := postgres.NewBannerRepository(tx)
-
-	ctx := context.Background()
-
+func prepareData(t *testing.T, tx pgx.Tx, ctx context.Context) error {
 	// insert in banners table
 	commandTag, err := tx.Exec(
 		ctx,
@@ -60,25 +51,12 @@ func TestBannerRepository(t *testing.T) {
 	t.Logf("banner_slot. Inserted %d row(s)", commandTag.RowsAffected())
 	require.NoError(t, err)
 
-	// Run SELECT for check inserted data
-	rows, err := tx.Query(ctx, "SELECT id, description FROM ranking_system.banners")
+	// insert in groups table
+	commandTag, err = tx.Exec(
+		ctx,
+		`INSERT INTO ranking_system.groups (id, description) VALUES (1, 'test group') RETURNING *`,
+	)
+	t.Logf("groups. Inserted %d row(s)", commandTag.RowsAffected())
 	require.NoError(t, err)
-	defer rows.Close()
-
-	// Print results in stdout
-	fmt.Println("Данные в таблице banners:")
-	for rows.Next() {
-		var id int64
-		var description string
-		err := rows.Scan(&id, &description)
-		require.NoError(t, err)
-		fmt.Printf("ID: %d, Description: %s\n", id, description)
-	}
-	require.NoError(t, rows.Err())
-
-	// test repo strategy
-	banners, err := repo.RequestBanner(ctx, 1)
-	require.NoError(t, err)
-	require.Len(t, banners, 1)
-	require.Equal(t, "test banner", banners[0].Description)
+	return err
 }

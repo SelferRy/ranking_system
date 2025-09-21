@@ -31,12 +31,15 @@ db-logs:
 	docker compose logs -f postgres
 
 migr-up:
+	docker compose up -d
 	goose up
 
 migr-down:
 	goose down
 
 repo-test:
+	docker compose up -d
 	goose up
-	go test internal/infra/adapters/repository/postgres/banner_repository_test.go
+	cd internal/infra/adapters/repository/postgres/postgres_test && go test -v
 	goose down
+	docker compose down
