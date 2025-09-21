@@ -7,7 +7,6 @@ import (
 	"github.com/SelferRy/ranking_system/internal/domain/interfaces/repository"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	//"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type DB interface {
@@ -20,10 +19,6 @@ type bannerRepository struct {
 	//pool *pgxpool.Pool
 	pool DB
 }
-
-//func NewBannerRepository(pool *pgxpool.Pool) repository.BannerRepository {
-//	return &bannerRepository{pool: pool}
-//}
 
 func NewBannerRepository(pool DB) repository.BannerRepository {
 	return &bannerRepository{pool: pool}
