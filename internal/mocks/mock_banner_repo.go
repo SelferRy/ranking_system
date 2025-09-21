@@ -64,21 +64,6 @@ func (mr *MockBannerRepositoryMockRecorder) ExistsInSlot(ctx, slotID, bannerID i
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ExistsInSlot", reflect.TypeOf((*MockBannerRepository)(nil).ExistsInSlot), ctx, slotID, bannerID)
 }
 
-// GetForSlot mocks base method.
-func (m *MockBannerRepository) GetForSlot(ctx context.Context, slotID entity.SlotID) ([]entity.Banner, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetForSlot", ctx, slotID)
-	ret0, _ := ret[0].([]entity.Banner)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetForSlot indicates an expected call of GetForSlot.
-func (mr *MockBannerRepositoryMockRecorder) GetForSlot(ctx, slotID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetForSlot", reflect.TypeOf((*MockBannerRepository)(nil).GetForSlot), ctx, slotID)
-}
-
 // RemoveFromSlot mocks base method.
 func (m *MockBannerRepository) RemoveFromSlot(ctx context.Context, slotID entity.SlotID, bannerID entity.BannerID) error {
 	m.ctrl.T.Helper()
@@ -91,4 +76,19 @@ func (m *MockBannerRepository) RemoveFromSlot(ctx context.Context, slotID entity
 func (mr *MockBannerRepositoryMockRecorder) RemoveFromSlot(ctx, slotID, bannerID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveFromSlot", reflect.TypeOf((*MockBannerRepository)(nil).RemoveFromSlot), ctx, slotID, bannerID)
+}
+
+// RequestBanner mocks base method.
+func (m *MockBannerRepository) RequestBanner(ctx context.Context, slotID entity.SlotID) ([]entity.Banner, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RequestBanner", ctx, slotID)
+	ret0, _ := ret[0].([]entity.Banner)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RequestBanner indicates an expected call of RequestBanner.
+func (mr *MockBannerRepositoryMockRecorder) RequestBanner(ctx, slotID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RequestBanner", reflect.TypeOf((*MockBannerRepository)(nil).RequestBanner), ctx, slotID)
 }

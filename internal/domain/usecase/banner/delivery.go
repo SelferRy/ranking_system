@@ -41,7 +41,7 @@ func (uc *DeliveryUseCase) SelectBanner(
 	groupID entity.GroupID,
 ) (entity.Banner, error) {
 	// 1. Get all banners for the slot
-	banners, err := uc.bannerRepo.GetForSlot(ctx, slotID)
+	banners, err := uc.bannerRepo.RequestBanner(ctx, slotID)
 	if err != nil {
 		return entity.Banner{}, fmt.Errorf("get banners: %w", err)
 	}

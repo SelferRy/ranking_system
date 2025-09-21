@@ -6,11 +6,10 @@ import (
 	"github.com/SelferRy/ranking_system/internal/config"
 	ucbanner "github.com/SelferRy/ranking_system/internal/domain/usecase/banner"
 	"github.com/SelferRy/ranking_system/internal/infra/adapters/broker/kafka"
-	"github.com/SelferRy/ranking_system/internal/infra/adapters/repository/sql/pg"
+	"github.com/SelferRy/ranking_system/internal/infra/adapters/repository/postgres"
 	"github.com/SelferRy/ranking_system/internal/infra/logger"
 	"github.com/SelferRy/ranking_system/internal/server"
-	"github.com/SelferRy/ranking_system/internal/server/grpc"
-	bannerservice "github.com/SelferRy/ranking_system/internal/server/grpc/handler/banner"
+	//bannerservice "github.com/SelferRy/ranking_system/internal/server/grpc/handler/banner"
 )
 
 type App struct {
@@ -23,7 +22,7 @@ func New(ctx context.Context, conf config.Config, logger logger.Logger) (*App, e
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	db, err := pg.New(logger, conf.Database)
+	db, err := postgres.New(logger, conf.Database)
 	if err != nil {
 		return nil, fmt.Errorf("repo initialization problem: %w", err)
 	}
