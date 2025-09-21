@@ -37,5 +37,6 @@ migr-down:
 	goose down
 
 repo-test:
-	migr-up
+	goose up
 	go test internal/infra/adapters/repository/postgres/banner_repository_test.go
+	goose down
