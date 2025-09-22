@@ -40,6 +40,7 @@ migr-down:
 repo-test:
 	docker compose up -d
 	goose up
-	cd internal/infra/adapters/repository/postgres/postgres_test && go test -v
+	sleep 3s
+	cd internal/infra/adapters/repository/postgres && go test -v
 	goose down
 	docker compose down

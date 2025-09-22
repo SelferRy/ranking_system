@@ -3,9 +3,10 @@ package postgres_test
 import (
 	"context"
 	"fmt"
-	"github.com/SelferRy/ranking_system/internal/infra/adapters/repository/postgres"
 	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/SelferRy/ranking_system/internal/infra/adapters/repository/postgres"
 )
 
 func TestBannerRepository(t *testing.T) {
