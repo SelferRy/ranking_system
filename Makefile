@@ -51,3 +51,9 @@ kafka-test-up:
 
 kafka-test-down:
 	docker compose -f tests/kafka-compose/docker-compose.yaml down
+
+kafka-test:
+	docker compose -f tests/kafka-compose/docker-compose.yaml up -d
+	sleep 2s
+	cd internal/infra/adapters/broker/kafka && go test -tags=integration -v
+	docker compose -f tests/kafka-compose/docker-compose.yaml down
