@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/SelferRy/ranking_system/internal/domain/entity"
+	"github.com/SelferRy/ranking_system/internal/domain/interfaces/broker"
 	"github.com/SelferRy/ranking_system/internal/domain/interfaces/repository"
 	"github.com/SelferRy/ranking_system/internal/domain/service/bandit"
-	"github.com/SelferRy/ranking_system/internal/infra/adapters/broker"
 	"github.com/SelferRy/ranking_system/internal/infra/logger"
 	"time"
 )

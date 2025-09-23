@@ -39,7 +39,7 @@ func TestDeliveryUseCase__SelectBanner__HappyPath(t *testing.T) {
 
 	// expectations
 	bannerRepo.EXPECT().
-		GetForSlot(ctx, slotID).
+		RequestBanner(ctx, slotID).
 		Return([]entity.Banner{{ID: bannerID, Description: "test"}}, nil)
 
 	statsRepo.EXPECT().
@@ -89,7 +89,7 @@ func TestDeliveryUseCase__SelectBanner__HappyPathSelectorMock(t *testing.T) {
 
 	// expectations
 	bannerRepo.EXPECT().
-		GetForSlot(ctx, slotID).
+		RequestBanner(ctx, slotID).
 		Return([]entity.Banner{{ID: bannerID, Description: "test"}}, nil)
 
 	statsRepo.EXPECT().
