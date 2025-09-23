@@ -126,7 +126,7 @@ func (p *Producer) Send(ctx context.Context, event entity.DomainEvent) error {
 			return nil
 		}
 
-		p.logger.Warn("kafke: send failed, will retry",
+		p.logger.Warn("kafka: send failed, will retry",
 			logger.StringVal("topic", p.topic),
 			logger.IntVal("attempt", attempt),
 			logger.ErrorVal("error", lastErr),
