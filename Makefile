@@ -15,27 +15,27 @@ mockgen:
 	mockgen -source=internal/domain/service/bandit/ucb1.go -destination=internal/mocks/mock_selector_service.go -package=mocks
 	mockgen -source=internal/infra/adapters/broker/kafka/producer.go -destination=internal/mocks/mock_producer_implementation.go -package=mocks -mock_names=brokerWriter=MockBrokerWriter
 
-db-up:
-	docker compose up -d
+db-test-up:
+	docker compose -f tests/postgres-compose/docker-compose.yaml up -d
 
-db-down:
-	docker compose down
+db-test-down:
+	docker compose -f tests/postgres-compose/docker-compose.yaml down
 
-db-reset:
-	docker compose down -v
-	docker compose up -d
+db-test-reset:
+	docker compose -f tests/postgres-compose/docker-compose.yaml down -v
+	docker compose -f tests/postgres-compose/docker-compose.yaml up -d
 
-db-shell:
+db-test-shell:
 	psql -h localhost -U user -d ranking_test
 
-db-logs:
-	docker compose logs -f postgres
+db-test-logs:
+	docker compose -f tests/postgres-compose/docker-compose.yaml logs -f postgres
 
-migr-up:
-	docker compose up -d
+migr-test-up:
+	docker compose -f tests/postgres-compose/docker-compose.yaml up -d
 	goose up
 
-migr-down:
+migr-test-down:
 	goose down
 
 repo-test:
@@ -45,3 +45,9 @@ repo-test:
 	cd internal/infra/adapters/repository/postgres && go test -tags=integration -v
 	goose down
 	docker compose -f tests/postgres-compose/docker-compose.yaml down
+
+kafka-test-up:
+	docker compose -f tests/kafka-compose/docker-compose.yaml up -d
+
+kafka-test-down:
+	docker compose -f tests/kafka-compose/docker-compose.yaml down
