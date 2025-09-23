@@ -78,3 +78,15 @@ func NewDefault() Logger {
 	logg.Info("a default logger was initialized.")
 	return logg
 }
+
+func StringVal(msg string, val string) zap.Field {
+	return zap.String(msg, val)
+}
+
+func IntVal(msg string, val int) zap.Field {
+	return zap.Int(msg, val)
+}
+
+func ErrorVal(msg string, val error) zap.Field {
+	return zap.NamedError(msg, val)
+}
