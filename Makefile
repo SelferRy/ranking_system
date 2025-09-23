@@ -39,9 +39,9 @@ migr-down:
 	goose down
 
 repo-test:
-	docker compose up -d
+	docker compose -f tests/postgres-compose/docker-compose.yaml up -d
 	goose up
 	sleep 3s
 	cd internal/infra/adapters/repository/postgres && go test -tags=integration -v
 	goose down
-	docker compose down
+	docker compose -f tests/postgres-compose/docker-compose.yaml down
