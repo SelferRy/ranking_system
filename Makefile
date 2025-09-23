@@ -11,7 +11,7 @@ generate:
 mockgen:
 	mockgen -source=internal/domain/interfaces/repository/banner.go -destination=internal/mocks/mock_banner_repo.go -package=mocks
 	mockgen -source=internal/domain/interfaces/repository/stats.go -destination=internal/mocks/mock_stats_repo.go -package=mocks
-	mockgen -source=internal/domain/interfaces/gateway/event_producer.go -destination=internal/mocks/mock_producer_gateway.go -package=mocks
+	mockgen -source=internal/domain/interfaces/broker/event_producer.go -destination=internal/mocks/mock_producer_gateway.go -package=mocks
 	mockgen -source=internal/domain/service/bandit/ucb1.go -destination=internal/mocks/mock_selector_service.go -package=mocks
 
 db-up:
@@ -41,6 +41,6 @@ repo-test:
 	docker compose up -d
 	goose up
 	sleep 3s
-	cd internal/infra/adapters/repository/postgres && go test -v
+	cd internal/infra/adapters/repository/postgres && go test -tags=integration -v
 	goose down
 	docker compose down

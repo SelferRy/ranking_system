@@ -35,49 +35,6 @@ func (m *MockBannerRepository) EXPECT() *MockBannerRepositoryMockRecorder {
 	return m.recorder
 }
 
-// AddToSlot mocks base method.
-func (m *MockBannerRepository) AddToSlot(ctx context.Context, slotID entity.SlotID, bannerID entity.BannerID) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddToSlot", ctx, slotID, bannerID)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// AddToSlot indicates an expected call of AddToSlot.
-func (mr *MockBannerRepositoryMockRecorder) AddToSlot(ctx, slotID, bannerID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddToSlot", reflect.TypeOf((*MockBannerRepository)(nil).AddToSlot), ctx, slotID, bannerID)
-}
-
-// ExistsInSlot mocks base method.
-func (m *MockBannerRepository) ExistsInSlot(ctx context.Context, slotID entity.SlotID, bannerID entity.BannerID) (bool, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ExistsInSlot", ctx, slotID, bannerID)
-	ret0, _ := ret[0].(bool)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ExistsInSlot indicates an expected call of ExistsInSlot.
-func (mr *MockBannerRepositoryMockRecorder) ExistsInSlot(ctx, slotID, bannerID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ExistsInSlot", reflect.TypeOf((*MockBannerRepository)(nil).ExistsInSlot), ctx, slotID, bannerID)
-}
-
-// RemoveFromSlot mocks base method.
-func (m *MockBannerRepository) RemoveFromSlot(ctx context.Context, slotID entity.SlotID, bannerID entity.BannerID) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RemoveFromSlot", ctx, slotID, bannerID)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// RemoveFromSlot indicates an expected call of RemoveFromSlot.
-func (mr *MockBannerRepositoryMockRecorder) RemoveFromSlot(ctx, slotID, bannerID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveFromSlot", reflect.TypeOf((*MockBannerRepository)(nil).RemoveFromSlot), ctx, slotID, bannerID)
-}
-
 // RequestBanner mocks base method.
 func (m *MockBannerRepository) RequestBanner(ctx context.Context, slotID entity.SlotID) ([]entity.Banner, error) {
 	m.ctrl.T.Helper()

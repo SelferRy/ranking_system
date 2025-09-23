@@ -50,35 +50,6 @@ func (mr *MockStatsRepositoryMockRecorder) GetBannerStats(ctx, bannerID, slotID,
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBannerStats", reflect.TypeOf((*MockStatsRepository)(nil).GetBannerStats), ctx, bannerID, slotID, groupID)
 }
 
-// GetSlotBannersStats mocks base method.
-func (m *MockStatsRepository) GetSlotBannersStats(ctx context.Context, slotID entity.SlotID, groupID entity.GroupID) ([]entity.BannerStat, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetSlotBannersStats", ctx, slotID, groupID)
-	ret0, _ := ret[0].([]entity.BannerStat)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetSlotBannersStats indicates an expected call of GetSlotBannersStats.
-func (mr *MockStatsRepositoryMockRecorder) GetSlotBannersStats(ctx, slotID, groupID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSlotBannersStats", reflect.TypeOf((*MockStatsRepository)(nil).GetSlotBannersStats), ctx, slotID, groupID)
-}
-
-// IncrementClick mocks base method.
-func (m *MockStatsRepository) IncrementClick(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID, groupID entity.GroupID) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IncrementClick", ctx, bannerID, slotID, groupID)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// IncrementClick indicates an expected call of IncrementClick.
-func (mr *MockStatsRepositoryMockRecorder) IncrementClick(ctx, bannerID, slotID, groupID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IncrementClick", reflect.TypeOf((*MockStatsRepository)(nil).IncrementClick), ctx, bannerID, slotID, groupID)
-}
-
 // RecordImpression mocks base method.
 func (m *MockStatsRepository) RecordImpression(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID, groupID entity.GroupID) error {
 	m.ctrl.T.Helper()
