@@ -173,14 +173,3 @@ func defaultKeyFunc(event entity.DomainEvent) []byte {
 func defaultBackoff(attempt int) time.Duration {
 	return time.Duration(attempt*attempt) * 100 * time.Millisecond
 }
-
-// TODO:
-//  +1. Logger values
-//   2. Mock tests
-//   3. Kafka conteiner UP
-//	 4. Integration tests
-//   5. Makefile setup for kafka tests
-//   6. Скорректировать API под usecase
-//	 7. Скорректировать main/root - запуск процесса, инициализации и пр. стартующую инфру
-//	 8. CI/CD: Dockerfile + общая сборка в контейнерах
-//	 9. Какой-то тест end-to-end
