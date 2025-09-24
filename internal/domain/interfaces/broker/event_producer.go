@@ -7,4 +7,5 @@ import (
 
 type EventProducer interface {
 	Send(ctx context.Context, event entity.DomainEvent) error
+	Close() error
 }

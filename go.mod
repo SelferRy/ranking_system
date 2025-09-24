@@ -5,6 +5,7 @@ go 1.24.1
 require (
 	github.com/golang/mock v1.6.0
 	github.com/jackc/pgx/v5 v5.7.6
+	github.com/joho/godotenv v1.5.1
 	github.com/segmentio/kafka-go v0.4.49
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.19.0

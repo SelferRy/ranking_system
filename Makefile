@@ -57,3 +57,12 @@ kafka-test:
 	sleep 2s
 	cd internal/infra/adapters/broker/kafka && go test -tags=integration -v
 	docker compose -f tests/kafka-compose/docker-compose.yaml down
+
+usecase-integration-test:
+	docker compose -f tests/postgres-compose/docker-compose.yaml up -d
+	goose up
+	docker compose -f tests/kafka-compose/docker-compose.yaml up -d
+	cd internal/domain/usecase/banner && go test -tags=integration -v
+	docker compose -f tests/kafka-compose/docker-compose.yaml down
+	goose down
+	docker compose -f tests/postgres-compose/docker-compose.yaml down
