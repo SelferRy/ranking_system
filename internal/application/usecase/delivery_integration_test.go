@@ -1,11 +1,12 @@
 //go:build integration
 // +build integration
 
-package banner_test
+package usecase_test
 
 import (
 	"context"
 	"fmt"
+	"github.com/SelferRy/ranking_system/internal/application/usecase"
 	"github.com/SelferRy/ranking_system/internal/domain/entity"
 	"github.com/SelferRy/ranking_system/internal/domain/interfaces/broker"
 	"github.com/SelferRy/ranking_system/internal/domain/service/bandit"
@@ -19,7 +20,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/SelferRy/ranking_system/internal/domain/usecase/banner"
 	"github.com/SelferRy/ranking_system/internal/infra/adapters/repository/postgres"
 	"github.com/SelferRy/ranking_system/internal/infra/logger"
 )
@@ -139,7 +139,7 @@ func TestDeliveryUseCase_IntegrationSelectBanner_HappyPath(t *testing.T) {
 	producer := setupTestBroker(t, ctx, log)
 	defer producer.Close()
 
-	uc := banner.NewDeliveryUseCase(
+	uc := usecase.NewDeliveryUseCase(
 		log,
 		bannerRepo,
 		statsRepo,

@@ -3,8 +3,8 @@ package app
 import (
 	"context"
 	"fmt"
+	ucbanner "github.com/SelferRy/ranking_system/internal/application/usecase"
 	"github.com/SelferRy/ranking_system/internal/config"
-	ucbanner "github.com/SelferRy/ranking_system/internal/domain/usecase/banner"
 	"github.com/SelferRy/ranking_system/internal/infra/adapters/broker/kafka"
 	"github.com/SelferRy/ranking_system/internal/infra/adapters/repository/postgres"
 	"github.com/SelferRy/ranking_system/internal/infra/logger"

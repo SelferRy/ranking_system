@@ -1,4 +1,4 @@
-package banner
+package usecase
 
 //func (uc DeliveryUseCase) RegisterClick(ctx context.Context, slotID, bannerID, groupID int64) error {
 //	if err := uc.statsRepo.IncrementClick(ctx, slotID, bannerID, groupID); err != nil {

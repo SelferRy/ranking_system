@@ -1,4 +1,4 @@
-package banner
+package usecase
 
 //func (uc DeliveryUseCase) AddBannerToSlot(ctx context.Context, slotID, bannerID int64) error {
 //	exists, err := uc.bannerRepo.ExistsInSlot(ctx, slotID, bannerID)
