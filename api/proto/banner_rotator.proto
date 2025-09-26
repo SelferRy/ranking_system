@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package ranking_system;
+
+option go_package = "github.com/SelferRy/ranking_system/api/gen;gen";
+
+service BannerRotatorService {
+  rpc SelectBanner(SelectBannerRequest) returns (SelectBannerResponse);
+}
+
+message SelectBannerRequest {
+  uint64 slot_id = 1;
+  uint64 group_id = 2;
+}
+
+message SelectBannerResponse {
+  Banner banner = 1;
+}
+
+message Banner {
+  uint64 id = 1;
+  string description = 2;
+}
