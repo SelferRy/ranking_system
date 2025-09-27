@@ -2,8 +2,11 @@ logger:
   level: "DEBUG"
   out_paths:
     - "stdout"
+    - "/var/log/ranking_system/app.log"
   error_output_paths:
     - "stderr"
+    - "/var/log/ranking_system/error.log"
+
 database:
   type: "sql"
   driver: "postgres"
@@ -13,9 +16,10 @@ database:
   user: "developer"
   password: "devpass"
   ssl: "disable"
-  max_conn: 10
-  max_idle_conn: 30
-  max_lifetime: 1m
+  max_conn: 20
+  max_idle_conn: 10
+  max_lifetime: 5m
+
 server:
   type: "grpc"
   host: "0.0.0.0"

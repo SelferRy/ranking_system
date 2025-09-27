@@ -6,12 +6,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-type Config struct {
-	Type string `json:"type,omitempty"`
-	Host string `json:"host,omitempty"`
-	Port string `json:"port,omitempty"`
-}
-
 type Server interface {
 	Start() error
 	Stop() error

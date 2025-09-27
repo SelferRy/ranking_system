@@ -3,15 +3,15 @@ package repository
 import "time"
 
 type Config struct {
-	Type        string        `json:"type,omitempty"`
-	Driver      string        `json:"driver,omitempty"`
-	Host        string        `json:"host,omitempty"`
-	Port        string        `json:"port,omitempty"`
-	Database    string        `json:"database,omitempty"`
-	User        string        `json:"user,omitempty"`
-	Password    string        `json:"password,omitempty"`
-	Ssl         string        `json:"ssl,omitempty"`
-	MaxConn     int           `json:"max_conn,omitempty"`
-	MaxIdleConn int           `json:"max_idle_conn,omitempty"`
-	MaxLifetime time.Duration `json:"max_lifetime,omitempty"`
+	Type        string        `mapstructure:"type,omitempty"`
+	Driver      string        `mapstructure:"driver,omitempty"`
+	Host        string        `mapstructure:"host,omitempty"`
+	Port        string        `mapstructure:"port,omitempty"`
+	Database    string        `mapstructure:"database,omitempty"`
+	User        string        `mapstructure:"user,omitempty"`
+	Password    string        `mapstructure:"password,omitempty"`
+	Ssl         string        `mapstructure:"ssl,omitempty"`
+	MaxConn     int           `mapstructure:"max_conn,omitempty"`
+	MaxIdleConn int           `mapstructure:"max_idle_conn,omitempty"`
+	MaxLifetime time.Duration `mapstructure:"max_lifetime,omitempty"`
 }
