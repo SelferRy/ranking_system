@@ -58,6 +58,16 @@ func NewProducer(brokers []string, topic string, opts ...Option) *Producer {
 	return p
 }
 
+func NewProducerFromConfig(cfg Config, logg logger.Logger, opts ...Option) *Producer {
+	baseOpts := []Option{
+		WithLogger(logg),
+	}
+
+	allOpts := append(baseOpts, opts...)
+
+	return NewProducer(cfg.Brokers, cfg.Topic, allOpts...)
+}
+
 func WithRetries(n int) Option {
 	return func(p *Producer) { p.retries = n }
 }

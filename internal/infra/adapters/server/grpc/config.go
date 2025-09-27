@@ -1,4 +1,4 @@
-package internalgrpc
+package grpc
 
 type Config struct {
 	Type string `mapstructure:"type,omitempty"`

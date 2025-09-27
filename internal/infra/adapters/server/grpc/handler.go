@@ -1,3 +1,4 @@
+// Package grpc: gRPC handler
 package grpc
 
 import (
@@ -10,18 +11,18 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type BannerRotatorService struct {
+type BannerRotatorHandler struct {
 	gen.UnimplementedBannerRotatorServiceServer
 	deliveryUC *usecase.DeliveryUseCase
 }
 
-func NewBannerRotatorService(deliveryUC *usecase.DeliveryUseCase) *BannerRotatorService {
-	return &BannerRotatorService{
+func NewBannerRotatorHandler(deliveryUC *usecase.DeliveryUseCase) *BannerRotatorHandler {
+	return &BannerRotatorHandler{
 		deliveryUC: deliveryUC,
 	}
 }
 
-func (s *BannerRotatorService) SelectBanner(
+func (s *BannerRotatorHandler) SelectBanner(
 	ctx context.Context,
 	req *gen.SelectBannerRequest,
 ) (*gen.SelectBannerResponse, error) {
