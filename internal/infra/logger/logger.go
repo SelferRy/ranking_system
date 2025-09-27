@@ -7,21 +7,17 @@ import (
 )
 
 var (
-	Int64 = zap.Int64
-	Error = zap.Error
+	String = zap.String
+	Int    = zap.Int
+	Error  = zap.NamedError
 )
-
-type Config struct {
-	Level            string   `mapstructure:"level"`
-	OutputPaths      []string `mapstructure:"out_paths"`
-	ErrorOutputPaths []string `mapstructure:"error_output_paths"`
-}
 
 type Logger interface {
 	Error(msg string, fields ...zapcore.Field)
 	Warn(msg string, fields ...zapcore.Field)
 	Info(msg string, fields ...zapcore.Field)
 	Debug(msg string, fields ...zapcore.Field)
+	Sync() error
 }
 
 type logger struct {
@@ -42,6 +38,10 @@ func (l *logger) Info(msg string, fields ...zapcore.Field) {
 
 func (l *logger) Debug(msg string, fields ...zapcore.Field) {
 	l.log.Debug(msg, fields...)
+}
+
+func (l *logger) Sync() error {
+	return l.log.Sync()
 }
 
 func New(conf Config) (Logger, error) {
@@ -77,16 +77,4 @@ func NewDefault() Logger {
 	}
 	logg.Info("a default logger was initialized.")
 	return logg
-}
-
-func StringVal(msg string, val string) zap.Field {
-	return zap.String(msg, val)
-}
-
-func IntVal(msg string, val int) zap.Field {
-	return zap.Int(msg, val)
-}
-
-func ErrorVal(msg string, val error) zap.Field {
-	return zap.NamedError(msg, val)
 }

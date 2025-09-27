@@ -118,27 +118,27 @@ func (p *Producer) Send(ctx context.Context, event entity.DomainEvent) error {
 		if lastErr == nil {
 			// TODO: обернуть в значения zap.Field + добавить интерфейс в logger
 			p.logger.Debug("kafka: message sent",
-				logger.StringVal("topic", p.topic),
-				logger.StringVal("event_type", eventType),
-				logger.StringVal("key", string(key)),
-				logger.IntVal("attempt", attempt),
+				logger.String("topic", p.topic),
+				logger.String("event_type", eventType),
+				logger.String("key", string(key)),
+				logger.Int("attempt", attempt),
 			)
 			return nil
 		}
 
 		p.logger.Warn("kafka: send failed, will retry",
-			logger.StringVal("topic", p.topic),
-			logger.IntVal("attempt", attempt),
-			logger.ErrorVal("error", lastErr),
+			logger.String("topic", p.topic),
+			logger.Int("attempt", attempt),
+			logger.Error("error", lastErr),
 		)
 
 		time.Sleep(p.backoff(attempt))
 	}
 
 	p.logger.Error("kafka: send failed after retries",
-		logger.StringVal("topic", p.topic),
-		logger.IntVal("attempts", p.retries),
-		logger.ErrorVal("error", lastErr),
+		logger.String("topic", p.topic),
+		logger.Int("attempts", p.retries),
+		logger.Error("error", lastErr),
 	)
 
 	return fmt.Errorf("failed to send message after %d attempts: %w", p.retries, lastErr)
