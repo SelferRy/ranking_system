@@ -2,10 +2,10 @@ logger:
   level: "DEBUG"
   out_paths:
     - "stdout"
-    - "/var/log/ranking_system/app.log"
+#    - "/var/log/ranking_system/app.log"
   error_output_paths:
     - "stderr"
-    - "/var/log/ranking_system/error.log"
+#    - "/var/log/ranking_system/error.log"
 
 database:
   type: "sql"
@@ -13,8 +13,8 @@ database:
   host: "localhost"
   port: "5432"
   database: "ranking_system"
-  user: "developer"
-  password: "devpass"
+  user: "prod_user"
+  password: "prod_password"
   ssl: "disable"
   max_conn: 20
   max_idle_conn: 10
