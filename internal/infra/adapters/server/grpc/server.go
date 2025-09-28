@@ -23,7 +23,7 @@ func NewServer(cfg Config, logger logger.Logger, registerServices func(*grpc.Ser
 	registerServices(grpcServer)
 
 	// create listener
-	address := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
+	address := fmt.Sprintf("%s:%s", cfg.Host, cfg.Port)
 	lis, err := net.Listen("tcp", address)
 	if err != nil {
 		return nil, fmt.Errorf("failed to listen: %w", err)
