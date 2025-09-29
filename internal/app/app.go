@@ -58,7 +58,7 @@ func New(ctx context.Context, conf config.Config, logger logger.Logger) (*App, e
 		grpcserver.RegisterServices(deliveryUC),
 	)
 	if err != nil {
-		producer.Close()
+		_ = producer.Close()
 		dbPool.Close()
 		return nil, fmt.Errorf("grpc server initialization failed: %w", err)
 	}
@@ -87,8 +87,12 @@ func (a App) Run(ctx context.Context) error {
 	a.logger.Info("Shutdown signal received")
 
 	// Graceful shutdown
-	a.grpcServer.Stop(ctx)
-	a.producer.Close()
+	if err := a.grpcServer.Stop(ctx); err != nil {
+		a.logger.Error("gRPC server failed", logger.Error("grpcServer.Stop error: ", err))
+	}
+	if err := a.producer.Close(); err != nil {
+		a.logger.Error("failed to close Kafka producer", logger.Error("producer.Close error: ", err))
+	}
 	a.dbPool.Close()
 
 	a.logger.Info("Application stopped gracefully")

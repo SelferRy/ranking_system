@@ -8,6 +8,7 @@ import (
 	"testing"
 )
 
+//nolint:unused
 func setupTestDB(t *testing.T) *pgxpool.Pool {
 	dsn := "postgres://user:password@localhost:5432/ranking_test?sslmode=disable&search_path=ranking_system"
 
@@ -17,6 +18,7 @@ func setupTestDB(t *testing.T) *pgxpool.Pool {
 	return pool
 }
 
+//nolint:unused
 func setupTestTx(t *testing.T, pool *pgxpool.Pool) pgx.Tx {
 	tx, err := pool.Begin(context.Background())
 	require.NoError(t, err)
@@ -26,6 +28,7 @@ func setupTestTx(t *testing.T, pool *pgxpool.Pool) pgx.Tx {
 	return tx
 }
 
+//nolint:unused
 func prepareData(t *testing.T, tx pgx.Tx, ctx context.Context) error {
 	// insert in banners table
 	commandTag, err := tx.Exec(

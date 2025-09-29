@@ -49,7 +49,9 @@ func runServe(opts ServeOptions) error {
 	if err != nil {
 		return fmt.Errorf("create logger: %w", err)
 	}
-	defer logg.Sync()
+	defer func() {
+		_ = logg.Sync()
+	}()
 
 	logg.Info("Starting ranking system",
 		logger.String("version", "1.0.0"),
@@ -62,12 +64,12 @@ func runServe(opts ServeOptions) error {
 	defer stop()
 
 	// Initialize and run application
-	app, err := app.New(ctx, cfg, logg)
+	application, err := app.New(ctx, cfg, logg)
 	if err != nil {
-		return fmt.Errorf("create app: %w", err)
+		return fmt.Errorf("create application: %w", err)
 	}
 
-	return app.Run(ctx)
+	return application.Run(ctx)
 }
 
 func loadConfig(configFile string) (config.Config, error) {
