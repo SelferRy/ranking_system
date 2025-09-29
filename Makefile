@@ -7,6 +7,8 @@ build:
 
 run: cli-up
 
+down: cli-deps-down
+
 test:
 	go test ./...
 
