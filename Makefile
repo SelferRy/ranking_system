@@ -23,6 +23,7 @@ mockgen:
 
 cli-compose-up:
 	docker compose -f docker-compose.cli.yaml up -d
+	sleep 3s
 
 cli-compose-down:
 	docker compose -f docker-compose.cli.yaml down -v
@@ -41,23 +42,8 @@ cli-deps-down: cli-compose-down
 
 cli-up:
 	$(MAKE) cli-deps-up
-	sleep 10s
+	sleep 4s
 	go run ./cmd/ranking_system serve
-#seed:
-#	@echo ">>> Loading seed data..."
-#	docker exec -i $$(docker compose -f "docker-compose.cli.yaml" ps -q postgres) \
-#		sh -c "psql -U postgres -d ranking" < seeds/cli_seed.sql
-#seed:
-#	@echo ">>> Loading seed data..."
-#	cat seeds/cli_seed.sql | docker exec -i $$(docker compose -f docker-compose.cli.yaml ps -q postgres) \
-#		psql -U postgres -d ranking
-#seed:
-#	@echo ">>> Loading seed data..."
-#	container=$$(docker compose -f docker-compose.cli.yaml ps -q postgres); \
-#	docker cp seeds/cli_seed.sql $$container:/cli_seed.sql; \
-#	docker exec -i $$container psql -U postgres -d ranking -f /cli_seed.sql
-
-#cli-data-deps-up: cli-deps-up migr-up seed
 
 cli-pipeline:
 	$(MAKE) cli-data-deps-up

@@ -32,58 +32,63 @@ services:
     depends_on:
       - zookeeper
       - postgres
+    # тут мы пробрасываем host:container порт 9092:9093. Это нужно для корректного связывания с kafka-setup
     ports:
-      - "9092:9092"
+      - "9092:9093"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+
+      # два listener'а: PLAINTEXT — для внутренней сети (kafka:9092),
+      # PLAINTEXT_HOST — для внешнего доступа (localhost:9092 -> контейнер:9093). Это нужно для корректного связывания с kafka-setup
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-    healthcheck:
-      test: [ "CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list" ]
-#      test: [ "CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list || exit 1" ]
 
+    healthcheck:
+      test: [ "CMD-SHELL", "kafka-topics --bootstrap-server kafka:9092 --list" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Для создания kafka топика:
   kafka-init:
     image: confluentinc/cp-kafka:7.2.15
-    container_name: ranking_kafka_init
     depends_on:
-      kafka:
-        condition: service_healthy
-    command: >
-      bash -c "
-        echo 'Waiting for Kafka to be ready...'
-        # Ожидаем, пока Kafka станет доступна
-        cub kafka-ready -b kafka:9092 1 30
-        echo 'Creating topic...'
-        # Создаем топик с нужными параметрами
-        kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --topic ranking_system_topic --partitions 1 --replication-factor 1
-        echo 'Topic created successfully!'"
-    environment:
-      # Настройки для внутреннего общения между контейнерами
-      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      - kafka
+    command: |
+      sh -c '
+      set -e
+      echo "Waiting for Kafka broker (kafka:9092) to become available..."
+      i=0
+      until kafka-topics --bootstrap-server kafka:9092 --list >/dev/null 2>&1; do
+        i=$$((i+1))
+        if [ "$$i" -ge 30 ]; then
+          echo "Kafka didn'\''t start after $$i attempts" >&2
+          exit 1
+        fi
+        echo "Waiting... ($$i/30)"
+        sleep 2
+      done
+
+      echo "Kafka is up"
+
+      kafka-topics --create --if-not-exists \
+        --bootstrap-server kafka:9092 \
+        --replication-factor 1 \
+        --partitions 3 \
+        --topic ranking_system_topic || true
+
+      echo "Topic ensured: ranking_system_topic"
+      sleep 1
+      '
+
 
 volumes:
   pgdata:
-
-
-
-#  kafka-init:
-#    image: confluentinc/cp-kafka:7.2.15
-#    container_name: ranking_kafka_init
-#    depends_on:
-#      - kafka
-#    command: >
-#      bash -c "
-#        echo 'Waiting for Kafka to be ready...'
-#        # Ожидаем, пока Kafka станет доступна
-#        cub kafka-ready -b kafka:9092 1 30
-#        echo 'Creating topic...'
-#        # Создаем топик с нужными параметрами
-#        kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --topic ranking_system_topic --partitions 1 --replication-factor 1
-#        echo 'Topic created successfully!'"
-#    environment:
-#      # Настройки для внутреннего общения между контейнерами
-#      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
