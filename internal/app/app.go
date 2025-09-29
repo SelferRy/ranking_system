@@ -11,12 +11,13 @@ import (
 	"github.com/SelferRy/ranking_system/internal/infra/adapters/server"
 	grpcserver "github.com/SelferRy/ranking_system/internal/infra/adapters/server/grpc"
 	"github.com/SelferRy/ranking_system/internal/infra/logger"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type App struct {
 	grpcServer server.Server
 	logger     logger.Logger
-	dbPool     postgres.Pool
+	dbPool     *pgxpool.Pool
 	producer   *internalkafka.Producer
 }
 
