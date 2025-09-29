@@ -2,6 +2,14 @@
 
 include makefiles/test.mk
 
+build:
+	go build ./cmd/ranking_system
+
+run: cli-up
+
+test:
+	go test ./...
+
 go_mod:
 	go mod tidy
 	go mod vendor
