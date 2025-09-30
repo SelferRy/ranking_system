@@ -5,9 +5,13 @@ include makefiles/test.mk
 build:
 	go build ./cmd/ranking_system
 
-run: cli-up
+run:
+	docker compose up -d --build
+	@echo "Waiting for all services to be ready..."
+	sleep 10s
 
-down: cli-deps-down
+down:
+	docker compose down -v
 
 test:
 	go test ./...
@@ -31,6 +35,24 @@ mockgen:
 	mockgen -source=internal/domain/service/bandit/ucb1.go -destination=internal/mocks/mock_selector_service.go -package=mocks
 	mockgen -source=internal/infra/adapters/broker/kafka/producer.go -destination=internal/mocks/mock_producer_implementation.go -package=mocks -mock_names=brokerWriter=MockBrokerWriter
 
+compose-up:
+	docker compose up -d --build
+	sleep 10s
+
+compose-down:
+	docker compose down -v
+
+compose-logs:
+	docker compose logs -f ranking_system
+
+#compose-full-up: compose-up
+#	@echo "Waiting for all services to be ready..."
+#	sleep 15s
+#	docker compose exec ranking_system goose up
+#	@echo "All services are up and running"
+#docker compose exec ranking_system goose up || true
+
+# cli part:
 cli-compose-up:
 	docker compose -f docker-compose.cli.yaml up -d
 	sleep 3s
@@ -39,7 +61,7 @@ cli-compose-down:
 	docker compose -f docker-compose.cli.yaml down -v
 
 migr-up:
-	goose up
+	source .env.cli && goose up
 
 seed:
 	@echo ">>> Loading seed data..."
@@ -55,6 +77,8 @@ cli-up:
 	sleep 4s
 	go run ./cmd/ranking_system serve
 
+cli-down: cli-deps-down
+
 cli-pipeline:
 	$(MAKE) cli-data-deps-up
 	go run ./cmd/ranking_system serve
@@ -63,7 +87,7 @@ cli-pipeline:
 
 db-migr-up:
 	$(MAKE) cli-deps-up
-	goose up
+	source .env.cli && goose up
 	sleep 3s
 
 db-migr-down:

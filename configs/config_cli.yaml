@@ -10,7 +10,7 @@ logger:
 database:
   type: "sql"
   driver: "postgres"
-  host: "postgres"
+  host: "localhost"
   port: "5432"
   database: "ranking_system"
   user: "prod_user"
@@ -27,5 +27,5 @@ server:
 
 broker:
   brokers:
-    - "kafka:9092"
+    - "localhost:9092"
   topic: "ranking_system_topic"

@@ -29,7 +29,7 @@ After that it will start server. Then you can test in in another terminal. For e
 ```bash
 grpcurl -plaintext -proto api/proto/banner_rotator.proto -d '{"slot_id": 1, "group_id": 1}' localhost:5080 ranking_system.BannerRotatorService/SelectBanner
 ```
-In current version of the project this is only one API endpoint and no reflection function added.
+In current version of the project this is only one API endpoint and no reflection grpc function added.
 
 For finish your work with the project, you have to terminate server (Ctrl+C, for example) 
 and then inactivate all dependencies:

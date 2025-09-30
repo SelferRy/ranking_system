@@ -1,0 +1,159 @@
+services:
+  ranking_system:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ranking_system_app
+    restart: unless-stopped
+    environment:
+      - CONFIG_PATH=/app/configs/config.yaml
+      - PGHOST=postgres
+      - PGPORT=5432
+      - PGUSER=prod_user
+      - PGDATABASE=ranking_system
+      - PGPASSWORD=prod_password
+    ports:
+      - "5080:5080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - ranking_network
+#    healthcheck:
+#      test: [ "CMD-SHELL", "curl -f http://localhost:5080 || exit 1" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 30s
+
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: ranking_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: prod_user
+      POSTGRES_PASSWORD: prod_password
+      POSTGRES_DB: ranking_system
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./seeds:/docker-entrypoint-initdb.d
+      - ./migrations:/migrations
+    networks:
+      - ranking_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prod_user -d ranking_system"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+#  db_seed:
+#    image: postgres:17-alpine
+#    container_name: ranking_db_seed
+#    depends_on:
+#      ranking_system:
+#        condition: service_healthy
+#    environment:
+#      PGPASSWORD: prod_password
+#    volumes:
+#      - ./seeds:/seeds
+#    command: |
+#      sh -c "
+#        echo 'Waiting for postgres to be ready...'
+#        until pg_isready -h postgres -p 5432 -U prod_user; do sleep 2; done
+#        echo 'Loading seed data...'
+#        psql -h postgres -U prod_user -d ranking_system -f /seeds/cli_seed.sql
+#      "
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.15
+    hostname: zookeeper
+    container_name: ranking_zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - ranking_network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.2.15
+    hostname: kafka
+    container_name: ranking_kafka
+    depends_on:
+      - zookeeper
+      - postgres
+    # тут мы пробрасываем host:container порт 9092:9093. Это нужно для корректного связывания с kafka-setup
+    ports:
+      - "9092:9093"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+      # два listener'а: PLAINTEXT — для внутренней сети (kafka:9092),
+      # PLAINTEXT_HOST — для внешнего доступа (localhost:9092 -> контейнер:9093). Это нужно для корректного связывания с kafka-setup
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    networks:
+      - ranking_network
+    healthcheck:
+      test: [ "CMD-SHELL", "kafka-topics --bootstrap-server kafka:9092 --list" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Для создания kafka топика:
+  kafka-init:
+    image: confluentinc/cp-kafka:7.2.15
+    container_name: ranking_kafka_init
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command: |
+      sh -c '
+      set -e
+      echo "Waiting for Kafka broker (kafka:9092) to become available..."
+      i=0
+      until kafka-topics --bootstrap-server kafka:9092 --list >/dev/null 2>&1; do
+        i=$$((i+1))
+        if [ "$$i" -ge 30 ]; then
+          echo "Kafka didn'\''t start after $$i attempts" >&2
+          exit 1
+        fi
+        echo "Waiting... ($$i/30)"
+        sleep 2
+      done
+
+      echo "Kafka is up"
+
+      kafka-topics --create --if-not-exists \
+        --bootstrap-server kafka:9092 \
+        --replication-factor 1 \
+        --partitions 3 \
+        --topic ranking_system_topic || true
+
+      echo "Topic ensured: ranking_system_topic"
+      sleep 1
+      '
+    networks:
+      - ranking_network
+
+
+volumes:
+  pgdata:
+
+networks:
+  ranking_network:
+    driver: bridge
