@@ -61,7 +61,9 @@ cli-compose-down:
 	docker compose -f docker-compose.cli.yaml down -v
 
 migr-up:
-	source .env.cli && goose up
+	set -a && source .env.cli && set +a && \
+    	goose up
+#source .env.cli && goose up
 
 seed:
 	@echo ">>> Loading seed data..."
@@ -72,10 +74,9 @@ cli-deps-up: cli-compose-up migr-up seed
 
 cli-deps-down: cli-compose-down
 
-cli-up:
-	$(MAKE) cli-deps-up
+cli-up: cli-deps-up
 	sleep 4s
-	go run ./cmd/ranking_system serve
+	go run ./cmd/ranking_system serve --config configs/config_cli.yaml
 
 cli-down: cli-deps-down
 

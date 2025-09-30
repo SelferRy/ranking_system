@@ -20,8 +20,7 @@ db-test-shell:
 db-test-logs:
 	docker compose -f tests/postgres-compose/docker-compose.yaml logs -f postgres
 
-migr-test-up:
-	$(MAKE) db-test-up
+migr-test-up: db-test-up
 	source .env.test && goose up
 	sleep 3s
 
