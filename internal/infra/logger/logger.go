@@ -9,6 +9,7 @@ import (
 var (
 	String = zap.String
 	Int    = zap.Int
+	Int64  = zap.Int64
 	Error  = zap.NamedError
 )
 
