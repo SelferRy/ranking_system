@@ -13,8 +13,8 @@ type ManagementUseCase struct {
 	repo   repository.ManagementRepository
 }
 
-func NewManagementUseCase(repo repository.ManagementRepository) *ManagementUseCase {
-	return &ManagementUseCase{repo: repo}
+func NewManagementUseCase(logger logger.Logger, repo repository.ManagementRepository) *ManagementUseCase {
+	return &ManagementUseCase{logger: logger, repo: repo}
 }
 
 func (uc *ManagementUseCase) AddBannerToSlot(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID) error {

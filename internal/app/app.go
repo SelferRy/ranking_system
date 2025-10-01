@@ -22,7 +22,6 @@ type App struct {
 }
 
 func New(ctx context.Context, conf config.Config, logger logger.Logger) (*App, error) {
-	// TODO: fill it like in nimoism imp (maybe return api (server) and then listen with new goroutine <-ctx.Done(),etc?
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -34,6 +33,7 @@ func New(ctx context.Context, conf config.Config, logger logger.Logger) (*App, e
 	// repo init
 	bannerRepo := postgres.NewBannerRepository(dbPool)
 	statsRepo := postgres.NewStatsRepository(dbPool)
+	managementRepo := postgres.NewManagementRepository(dbPool)
 
 	// init broker
 	producer := internalkafka.NewProducerFromConfig(conf.Broker, logger)
@@ -49,13 +49,18 @@ func New(ctx context.Context, conf config.Config, logger logger.Logger) (*App, e
 		producer,
 	)
 
+	managementUC := ucbanner.NewManagementUseCase(
+		logger,
+		managementRepo,
+	)
+
 	grpcServer, err := grpcserver.NewServer(
 		grpcserver.Config{
 			Host: conf.Server.Host,
 			Port: conf.Server.Port,
 		},
 		logger,
-		grpcserver.RegisterServices(deliveryUC),
+		grpcserver.RegisterServices(deliveryUC, managementUC),
 	)
 	if err != nil {
 		_ = producer.Close()
@@ -63,7 +68,6 @@ func New(ctx context.Context, conf config.Config, logger logger.Logger) (*App, e
 		return nil, fmt.Errorf("grpc server initialization failed: %w", err)
 	}
 
-	//return ConcreteServer{ctx, conf, logger}
 	return &App{
 		grpcServer: grpcServer,
 		logger:     logger,

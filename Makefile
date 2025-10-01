@@ -26,7 +26,7 @@ generate:
 		--proto_path=api/proto \
 		--go_out=api/gen --go_opt=paths=source_relative \
 		--go-grpc_out=api/gen --go-grpc_opt=paths=source_relative \
-		 ./api/proto/banner_rotator.proto
+		 ./api/proto/*.proto
 
 mockgen:
 	mockgen -source=internal/domain/interfaces/repository/banner.go -destination=internal/mocks/mock_banner_repo.go -package=mocks

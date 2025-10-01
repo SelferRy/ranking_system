@@ -126,7 +126,6 @@ func (p *Producer) Send(ctx context.Context, event entity.DomainEvent) error {
 
 		lastErr = p.writer.WriteMessages(ctx, msg)
 		if lastErr == nil {
-			// TODO: обернуть в значения zap.Field + добавить интерфейс в logger
 			p.logger.Debug("kafka: message sent",
 				logger.String("topic", p.topic),
 				logger.String("event_type", eventType),

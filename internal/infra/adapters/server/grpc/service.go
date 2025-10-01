@@ -7,10 +7,14 @@ import (
 	"google.golang.org/grpc"
 )
 
-func RegisterServices(uc *usecase.DeliveryUseCase) func(*grpc.Server) {
+func RegisterServices(ucDelivery *usecase.DeliveryUseCase, ucManagement *usecase.ManagementUseCase) func(*grpc.Server) {
 	return func(s *grpc.Server) {
 		// registration of BannerRotatorService
-		handler := NewBannerRotatorHandler(uc)
-		gen.RegisterBannerRotatorServiceServer(s, handler)
+		handlerBannerRotator := NewBannerRotatorHandler(ucDelivery)
+		gen.RegisterBannerRotatorServiceServer(s, handlerBannerRotator)
+
+		// registration of BannerManagementService
+		handlerBannerManager := NewBannerManagementHandler(ucManagement)
+		gen.RegisterBannerManagementServiceServer(s, handlerBannerManager)
 	}
 }
