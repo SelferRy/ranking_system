@@ -99,7 +99,7 @@ db-migr-down:
 
 # Remember:
 # cli-up - запускает серверную часть
-# проверка серверной части через: grpcurl -plaintext -proto api/proto/banner_rotator.proto -d '{"slot_id": 1, "group_id": 1}' localhost:5080 ranking_system.BannerRotatorService/SelectBanner
+# проверка серверной части через: grpcurl -plaintext -import-path api/proto -proto api/proto/banner_rotator.proto -d '{"slot_id": 1, "group_id": 1}' localhost:5080 ranking_system.BannerRotatorService/SelectBanner
 # проверка серверной части через:
 # 0.1 (не рабочий) grpcurl -plaintext -proto api/proto/banner_management.proto -d '{"banner_id": 2, "slot_id": 2}' localhost:5080 ranking_system.BannerManagementService/AddBannerToSlot
 # 0.2 (рабочий, но баннер уже существует) grpcurl -plaintext -proto api/proto/banner_management.proto -d '{"banner_id": 2, "slot_id": 1}' localhost:5080 ranking_system.BannerManagementService/AddBannerToSlot

@@ -27,7 +27,23 @@ make test
 `make run` - this command start to download all dependent containers, start them and run. 
 After that it will start server. Then you can test in in another terminal. For example, use can use command like this:
 ```bash
-grpcurl -plaintext -proto api/proto/banner_rotator.proto -d '{"slot_id": 1, "group_id": 1}' localhost:5080 ranking_system.BannerRotatorService/SelectBanner
+grpcurl -plaintext -import-path api/proto -proto api/proto/banner_rotator.proto -d '{"slot_id": 1, "group_id": 1}' localhost:5080 ranking_system.BannerRotatorService/SelectBanner
+```
+You can create your banner:
+```bash
+grpcurl -plaintext \
+  -import-path api/proto \
+  -proto banner_management.proto \
+  -d '{"banner": {"id": 3, "description": "Test banner"}, "slot_id": 1}' \
+  localhost:5080 ranking_system.BannerManagementService/AddBannerToSlot
+ ```
+And remove it after that:
+```bash
+grpcurl -plaintext \
+  -import-path api/proto \
+  -proto banner_management.proto \
+  -d '{"banner": {"id": 3, "description": "Test banner"}, "slot_id": 1}' \
+  localhost:5080 ranking_system.BannerManagementService/RemoveBannerFromSlot
 ```
 In current version of the project this is only one API endpoint and no reflection grpc function added.
 
