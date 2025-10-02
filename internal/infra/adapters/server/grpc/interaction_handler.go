@@ -22,7 +22,7 @@ func NewBannerInteractionHandler(interactionUC *usecase.InteractionUseCase) *Ban
 	}
 }
 
-func (s *BannerInteractionHandler) RegisterClick(
+func (s *BannerInteractionHandler) ClickBanner(
 	ctx context.Context,
 	req *gen.ClickBannerRequest,
 ) (*gen.ClickBannerResponse, error) {

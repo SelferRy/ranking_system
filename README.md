@@ -25,10 +25,18 @@ make build
 make test
 ```
 `make run` - this command start to download all dependent containers, start them and run. 
-After that it will start server. Then you can test in in another terminal. For example, use can use command like this:
+After that it will start server. Then you can test in in another terminal. See commands below.
+
+Select banner:
 ```bash
 grpcurl -plaintext -import-path api/proto -proto api/proto/banner_rotator.proto -d '{"slot_id": 1, "group_id": 1}' localhost:5080 ranking_system.BannerRotatorService/SelectBanner
 ```
+
+Click banner:
+```bash
+grpcurl -plaintext -import-path api/proto -proto api/proto/banner_interaction.proto -d '{"banner_id": 1, "slot_id": 1, "group_id": 1}' localhost:5080 ranking_system.BannerInteractionService/ClickBanner
+```
+
 You can create your banner:
 ```bash
 grpcurl -plaintext \
