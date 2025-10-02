@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package ranking_system;
+
+option go_package = "github.com/SelferRy/ranking_system/api/gen;gen";
+
+
+service BannerInteractionService {
+  rpc ClickBanner(ClickBannerRequest) returns (ClickBannerResponse);
+}
+
+message ClickBannerRequest {
+  uint64 banner_id = 1;
+  uint64 slot_id = 2;
+  uint64 group_id = 3;
+}
+
+message ClickBannerResponse {
+  bool success = 1;
+  string error = 2;
+}

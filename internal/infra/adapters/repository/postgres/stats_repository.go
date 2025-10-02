@@ -56,3 +56,23 @@ func (r *statsRepository) GetBannerStats(
 	}
 	return stat, nil
 }
+
+func (r *statsRepository) RecordClick(
+	ctx context.Context,
+	bannerID entity.BannerID,
+	slotID entity.SlotID,
+	groupID entity.GroupID,
+) error {
+	const query = `
+		INSERT INTO ranking_system.banner_stats (banner_id, slot_id, group_id, impressions, clicks)
+		VALUES ($1, $2, $3, 0, 1)
+		ON CONFLICT (banner_id, slot_id, group_id) 
+			DO UPDATE SET clicks = banner_stats.clicks + 1
+	`
+
+	_, err := r.pool.Exec(ctx, query, bannerID, slotID, groupID)
+	if err != nil {
+		return fmt.Errorf("record click: %w", err)
+	}
+	return nil
+}

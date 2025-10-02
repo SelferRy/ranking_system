@@ -54,13 +54,20 @@ func New(ctx context.Context, conf config.Config, logger logger.Logger) (*App, e
 		managementRepo,
 	)
 
+	interactionUC := ucbanner.NewInteractionUseCase(
+		logger,
+		managementRepo,
+		statsRepo,
+		producer,
+	)
+
 	grpcServer, err := grpcserver.NewServer(
 		grpcserver.Config{
 			Host: conf.Server.Host,
 			Port: conf.Server.Port,
 		},
 		logger,
-		grpcserver.RegisterServices(deliveryUC, managementUC),
+		grpcserver.RegisterServices(deliveryUC, managementUC, interactionUC),
 	)
 	if err != nil {
 		_ = producer.Close()
