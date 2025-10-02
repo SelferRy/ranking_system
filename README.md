@@ -45,7 +45,7 @@ grpcurl -plaintext \
   -d '{"banner": {"id": 3, "description": "Test banner"}, "slot_id": 1}' \
   localhost:5080 ranking_system.BannerManagementService/RemoveBannerFromSlot
 ```
-In current version of the project this is only one API endpoint and no reflection grpc function added.
+In current version of the project this is all API endpoints and no reflection grpc function added.
 
 For finish your work with the project, you have to terminate server (Ctrl+C, for example) 
 and then inactivate all dependencies:
