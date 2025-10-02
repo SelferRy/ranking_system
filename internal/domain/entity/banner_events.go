@@ -31,11 +31,11 @@ type BannerClickRecorded struct {
 	BannerID BannerID
 	SlotID   SlotID
 	GroupID  GroupID
-	Occurred time.Time
+	Time     time.Time
 }
 
 func (e BannerClickRecorded) EventType() string    { return "BannerClickRecorded" }
-func (e BannerClickRecorded) EventTime() time.Time { return e.Occurred }
+func (e BannerClickRecorded) EventTime() time.Time { return e.Time }
 func (e BannerClickRecorded) Key() []byte {
 	return []byte(fmt.Sprintf("%d-%d-%d", e.BannerID, e.SlotID, e.GroupID))
 }

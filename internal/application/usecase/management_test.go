@@ -73,7 +73,7 @@ func TestManagementUseCase_AddBannerToSlot_ErrorOnExistsCheck(t *testing.T) {
 	mockRepo := mocks.NewMockManagementRepository(ctrl)
 	logg := logger.NewDefault()
 	uc := NewManagementUseCase(logg, mockRepo)
-	uc.logger = logger.NewDefault()
+	uc.log = logger.NewDefault()
 
 	banner := entity.Banner{ID: entity.BannerID(1), Description: "some"}
 	slotID := entity.SlotID(1)
@@ -128,7 +128,7 @@ func TestManagementUseCase_RemoveBannerFromSlot_HappyPath(t *testing.T) {
 	mockRepo := mocks.NewMockManagementRepository(ctrl)
 	logg := logger.NewDefault()
 	uc := NewManagementUseCase(logg, mockRepo)
-	uc.logger = logger.NewDefault()
+	uc.log = logger.NewDefault()
 
 	banner := entity.Banner{ID: entity.BannerID(1), Description: "some"}
 	slotID := entity.SlotID(1)
@@ -153,7 +153,7 @@ func TestManagementUseCase_RemoveBannerFromSlot_Error(t *testing.T) {
 	mockRepo := mocks.NewMockManagementRepository(ctrl)
 	logg := logger.NewDefault()
 	uc := NewManagementUseCase(logg, mockRepo)
-	uc.logger = logger.NewDefault()
+	uc.log = logger.NewDefault()
 
 	banner := entity.Banner{ID: entity.BannerID(1), Description: "some"}
 	slotID := entity.SlotID(1)

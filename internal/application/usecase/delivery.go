@@ -62,7 +62,7 @@ func (uc *DeliveryUseCase) SelectBanner(
 	}
 
 	// 4.Upd stats
-	if err := uc.statsRepo.RecordImpression(ctx, selectedID, slotID, groupID); err != nil {
+	if err = uc.statsRepo.RecordImpression(ctx, selectedID, slotID, groupID); err != nil {
 		return entity.Banner{}, fmt.Errorf("record impression: %w", err)
 	}
 

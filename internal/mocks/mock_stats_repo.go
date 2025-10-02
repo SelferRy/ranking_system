@@ -50,6 +50,20 @@ func (mr *MockStatsRepositoryMockRecorder) GetBannerStats(ctx, bannerID, slotID,
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBannerStats", reflect.TypeOf((*MockStatsRepository)(nil).GetBannerStats), ctx, bannerID, slotID, groupID)
 }
 
+// RecordClick mocks base method.
+func (m *MockStatsRepository) RecordClick(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID, groupID entity.GroupID) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RecordClick", ctx, bannerID, slotID, groupID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RecordClick indicates an expected call of RecordClick.
+func (mr *MockStatsRepositoryMockRecorder) RecordClick(ctx, bannerID, slotID, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RecordClick", reflect.TypeOf((*MockStatsRepository)(nil).RecordClick), ctx, bannerID, slotID, groupID)
+}
+
 // RecordImpression mocks base method.
 func (m *MockStatsRepository) RecordImpression(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID, groupID entity.GroupID) error {
 	m.ctrl.T.Helper()
