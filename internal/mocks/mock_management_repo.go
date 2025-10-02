@@ -36,17 +36,17 @@ func (m *MockManagementRepository) EXPECT() *MockManagementRepositoryMockRecorde
 }
 
 // AddBannerToSlot mocks base method.
-func (m *MockManagementRepository) AddBannerToSlot(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID) error {
+func (m *MockManagementRepository) AddBannerToSlot(ctx context.Context, banner entity.Banner, slotID entity.SlotID) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddBannerToSlot", ctx, bannerID, slotID)
+	ret := m.ctrl.Call(m, "AddBannerToSlot", ctx, banner, slotID)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // AddBannerToSlot indicates an expected call of AddBannerToSlot.
-func (mr *MockManagementRepositoryMockRecorder) AddBannerToSlot(ctx, bannerID, slotID interface{}) *gomock.Call {
+func (mr *MockManagementRepositoryMockRecorder) AddBannerToSlot(ctx, banner, slotID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddBannerToSlot", reflect.TypeOf((*MockManagementRepository)(nil).AddBannerToSlot), ctx, bannerID, slotID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddBannerToSlot", reflect.TypeOf((*MockManagementRepository)(nil).AddBannerToSlot), ctx, banner, slotID)
 }
 
 // BannerExistsInSlot mocks base method.
@@ -65,15 +65,15 @@ func (mr *MockManagementRepositoryMockRecorder) BannerExistsInSlot(ctx, bannerID
 }
 
 // RemoveBannerFromSlot mocks base method.
-func (m *MockManagementRepository) RemoveBannerFromSlot(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID) error {
+func (m *MockManagementRepository) RemoveBannerFromSlot(ctx context.Context, banner entity.Banner, slotID entity.SlotID) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RemoveBannerFromSlot", ctx, bannerID, slotID)
+	ret := m.ctrl.Call(m, "RemoveBannerFromSlot", ctx, banner, slotID)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // RemoveBannerFromSlot indicates an expected call of RemoveBannerFromSlot.
-func (mr *MockManagementRepositoryMockRecorder) RemoveBannerFromSlot(ctx, bannerID, slotID interface{}) *gomock.Call {
+func (mr *MockManagementRepositoryMockRecorder) RemoveBannerFromSlot(ctx, banner, slotID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveBannerFromSlot", reflect.TypeOf((*MockManagementRepository)(nil).RemoveBannerFromSlot), ctx, bannerID, slotID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveBannerFromSlot", reflect.TypeOf((*MockManagementRepository)(nil).RemoveBannerFromSlot), ctx, banner, slotID)
 }

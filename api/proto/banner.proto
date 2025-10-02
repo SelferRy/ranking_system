@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package ranking_system;
+
+option go_package = "github.com/SelferRy/ranking_system/api/gen;gen";
+
+message Banner {
+  uint64 id = 1;
+  string description = 2;
+}

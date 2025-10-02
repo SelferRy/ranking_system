@@ -4,6 +4,8 @@ package ranking_system;
 
 option go_package = "github.com/SelferRy/ranking_system/api/gen;gen";
 
+import "banner.proto";
+
 service BannerRotatorService {
   rpc SelectBanner(SelectBannerRequest) returns (SelectBannerResponse);
 }
@@ -15,9 +17,4 @@ message SelectBannerRequest {
 
 message SelectBannerResponse {
   Banner banner = 1;
-}
-
-message Banner {
-  uint64 id = 1;
-  string description = 2;
 }

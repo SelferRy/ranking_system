@@ -17,37 +17,37 @@ func NewManagementUseCase(logger logger.Logger, repo repository.ManagementReposi
 	return &ManagementUseCase{logger: logger, repo: repo}
 }
 
-func (uc *ManagementUseCase) AddBannerToSlot(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID) error {
-	exists, err := uc.repo.BannerExistsInSlot(ctx, bannerID, slotID)
+func (uc *ManagementUseCase) AddBannerToSlot(ctx context.Context, banner entity.Banner, slotID entity.SlotID) error {
+	exists, err := uc.repo.BannerExistsInSlot(ctx, banner.ID, slotID)
 	if err != nil {
 		return fmt.Errorf("check banner existence: %w", err)
 	}
 	if exists {
 		uc.logger.Info("banner already exists",
-			logger.Int64("banner_id", int64(bannerID)),
+			logger.Int64("banner_id", int64(banner.ID)),
 			logger.Int64("slot_id", int64(slotID)),
 		)
 		return nil
 	}
 
-	if err := uc.repo.AddBannerToSlot(ctx, bannerID, slotID); err != nil {
+	if err := uc.repo.AddBannerToSlot(ctx, banner, slotID); err != nil {
 		return fmt.Errorf("add banner to slot: %w", err)
 	}
 	uc.logger.Info(
 		"banner added to slot",
-		logger.Int64("bannerID", int64(bannerID)),
+		logger.Int64("bannerID", int64(banner.ID)),
 		logger.Int64("slotID", int64(slotID)),
 	)
 	return nil
 }
 
-func (uc *ManagementUseCase) RemoveBannerFromSlot(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID) error {
-	if err := uc.repo.RemoveBannerFromSlot(ctx, bannerID, slotID); err != nil {
+func (uc *ManagementUseCase) RemoveBannerFromSlot(ctx context.Context, banner entity.Banner, slotID entity.SlotID) error {
+	if err := uc.repo.RemoveBannerFromSlot(ctx, banner, slotID); err != nil {
 		return fmt.Errorf("remove banner from slot: %w", err)
 	}
 	uc.logger.Info(
 		"banner removed from slot",
-		logger.Int64("bannerID", int64(bannerID)),
+		logger.Int64("bannerID", int64(banner.ID)),
 		logger.Int64("slotID", int64(slotID)),
 	)
 	return nil

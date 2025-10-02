@@ -100,5 +100,26 @@ db-migr-down:
 # Remember:
 # cli-up - запускает серверную часть
 # проверка серверной части через: grpcurl -plaintext -proto api/proto/banner_rotator.proto -d '{"slot_id": 1, "group_id": 1}' localhost:5080 ranking_system.BannerRotatorService/SelectBanner
+# проверка серверной части через:
+# 0.1 (не рабочий) grpcurl -plaintext -proto api/proto/banner_management.proto -d '{"banner_id": 2, "slot_id": 2}' localhost:5080 ranking_system.BannerManagementService/AddBannerToSlot
+# 0.2 (рабочий, но баннер уже существует) grpcurl -plaintext -proto api/proto/banner_management.proto -d '{"banner_id": 2, "slot_id": 1}' localhost:5080 ranking_system.BannerManagementService/AddBannerToSlot
+# 1.1 либо перейте в api/proto и: grpcurl -plaintext \
+                                  #  -proto banner_management.proto \
+                                  #  -d '{"banner": {"id": 3, "description": "Test banner"}, "slot_id": 1}' \
+                                  #  localhost:5080 ranking_system.BannerManagementService/AddBannerToSlot
+# 1.2 либо просто:
+#grpcurl -plaintext \
+#  -import-path api/proto \
+#  -proto banner_management.proto \
+#  -d '{"banner": {"id": 3, "description": "Test banner"}, "slot_id": 1}' \
+#  localhost:5080 ranking_system.BannerManagementService/AddBannerToSlot
+# 1.3 удалить баннер:
+#grpcurl -plaintext \
+#  -import-path api/proto \
+#  -proto banner_management.proto \
+#  -d '{"banner": {"id": 3, "description": "Test banner"}, "slot_id": 1}' \
+#  localhost:5080 ranking_system.BannerManagementService/RemoveBannerFromSlot
+
+# 2. grpcurl -plaintext -proto api/proto/banner_rotator.proto -d '{"slot_id": 1, "group_id": 1}' localhost:5080 ranking_system.BannerRotatorService/SelectBanner
 # пока не работает создание топика, надо внутри контейнера выполнить: kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --topic ranking_system_topic --partitions 1 --replication-factor 1
 # и проверка: kafka-topics --bootstrap-server localhost:9092 --list

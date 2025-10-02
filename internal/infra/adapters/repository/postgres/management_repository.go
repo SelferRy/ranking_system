@@ -7,6 +7,7 @@ import (
 	"github.com/SelferRy/ranking_system/internal/domain/entity"
 	"github.com/SelferRy/ranking_system/internal/domain/interfaces/repository"
 	"github.com/jackc/pgx/v5"
+	"time"
 )
 
 type managementRepository struct {
@@ -19,16 +20,26 @@ func NewManagementRepository(pool Pool) repository.ManagementRepository {
 
 func (r *managementRepository) AddBannerToSlot(
 	ctx context.Context,
-	bannerID entity.BannerID,
+	banner entity.Banner,
 	slotID entity.SlotID) error {
-	const query = `
+	const queryBanners = `
+		INSERT INTO ranking_system.banners (id, description, banned_at, created_at, updated_at) 
+		VALUES ($1, $2, $3, $4, $5)
+		ON CONFLICT (id) DO NOTHING;
+	`
+	_, err := r.pool.Exec(ctx, queryBanners, banner.ID, banner.Description, nil, time.Now(), time.Now())
+	if err != nil {
+		return fmt.Errorf("failed to add banner %d: %w", int64(banner.ID), err)
+	}
+
+	const queryBannerSlot = `
 		INSERT INTO ranking_system.banner_slot (banner_id, slot_id)
 		VALUES ($1, $2)
 		ON CONFLICT (banner_id, slot_id) DO NOTHING;
 	`
-	_, err := r.pool.Exec(ctx, query, bannerID, slotID)
+	_, err = r.pool.Exec(ctx, queryBannerSlot, banner.ID, slotID)
 	if err != nil {
-		return fmt.Errorf("failed to add banner %d to slot %d: %w", int64(bannerID), int64(slotID), err)
+		return fmt.Errorf("failed to add banner %d to slot %d: %w", int64(banner.ID), int64(slotID), err)
 	}
 	return nil
 }
@@ -60,15 +71,24 @@ func (r *managementRepository) BannerExistsInSlot(
 
 func (r *managementRepository) RemoveBannerFromSlot(
 	ctx context.Context,
-	bannerID entity.BannerID,
+	banner entity.Banner,
 	slotID entity.SlotID) error {
-	const query = `
+	const queryBannerSlot = `
 		DELETE FROM ranking_system.banner_slot
 		WHERE banner_id = $1 AND slot_id = $2; 
 	`
-	_, err := r.pool.Exec(ctx, query, bannerID, slotID)
+	_, err := r.pool.Exec(ctx, queryBannerSlot, banner.ID, slotID)
 	if err != nil {
-		return fmt.Errorf("failed to remove banner %d to slot %d: %w", int64(bannerID), int64(slotID), err)
+		return fmt.Errorf("failed to remove banner %d to slot %d: %w", int64(banner.ID), int64(slotID), err)
+	}
+
+	const queryBanners = `
+		DELETE FROM ranking_system.banners
+		WHERE id = $1;
+	`
+	_, err = r.pool.Exec(ctx, queryBanners, banner.ID)
+	if err != nil {
+		return fmt.Errorf("failed to remove banner %d from banners table: %w", int64(banner.ID), err)
 	}
 	return nil
 }

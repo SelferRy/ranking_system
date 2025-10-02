@@ -26,7 +26,7 @@ func (h *BannerManagementHandler) AddBannerToSlot(
 	ctx context.Context,
 	req *gen.AddBannerToSlotRequest,
 ) (*gen.AddBannerToSlotResponse, error) {
-	if req.BannerId == 0 {
+	if req.Banner.Id == 0 {
 		return nil, status.Error(codes.InvalidArgument, "banner_id is required")
 	}
 	if req.SlotId == 0 {
@@ -35,13 +35,13 @@ func (h *BannerManagementHandler) AddBannerToSlot(
 
 	err := h.managementUC.AddBannerToSlot(
 		ctx,
-		entity.BannerID(req.BannerId),
+		entity.Banner{ID: entity.BannerID(req.Banner.Id), Description: req.Banner.Description},
 		entity.SlotID(req.SlotId),
 	)
 	if err != nil {
 		return &gen.AddBannerToSlotResponse{
 			Success: false,
-			Error:   fmt.Sprintf("add banner to slot: %v", err),
+			Error:   fmt.Sprintf("add banner to slot via handler: %v", err),
 		}, status.Error(codes.Internal, err.Error())
 	}
 
@@ -54,7 +54,7 @@ func (h *BannerManagementHandler) RemoveBannerFromSlot(
 	ctx context.Context,
 	req *gen.RemoveBannerFromSlotRequest,
 ) (*gen.RemoveBannerFromSlotResponse, error) {
-	if req.BannerId == 0 {
+	if req.Banner.Id == 0 {
 		return nil, status.Error(codes.InvalidArgument, "banner_id is required")
 	}
 	if req.SlotId == 0 {
@@ -63,7 +63,7 @@ func (h *BannerManagementHandler) RemoveBannerFromSlot(
 
 	err := h.managementUC.RemoveBannerFromSlot(
 		ctx,
-		entity.BannerID(req.BannerId),
+		entity.Banner{ID: entity.BannerID(req.Banner.Id), Description: req.Banner.Description},
 		entity.SlotID(req.SlotId),
 	)
 	if err != nil {

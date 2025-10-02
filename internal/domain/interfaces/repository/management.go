@@ -7,7 +7,7 @@ import (
 
 // ManagementRepository defines methods for managing banners within slots.
 type ManagementRepository interface {
-	AddBannerToSlot(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID) error
+	AddBannerToSlot(ctx context.Context, banner entity.Banner, slotID entity.SlotID) error
 	BannerExistsInSlot(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID) (bool, error)
-	RemoveBannerFromSlot(ctx context.Context, bannerID entity.BannerID, slotID entity.SlotID) error
+	RemoveBannerFromSlot(ctx context.Context, banner entity.Banner, slotID entity.SlotID) error
 }

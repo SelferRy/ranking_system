@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package ranking_system;
+
+option go_package = "github.com/SelferRy/ranking_system/api/gen;gen";
+
+import "banner.proto";
+
+service BannerManagementService {
+  rpc AddBannerToSlot(AddBannerToSlotRequest) returns (AddBannerToSlotResponse);
+  rpc RemoveBannerFromSlot(RemoveBannerFromSlotRequest) returns (RemoveBannerFromSlotResponse);
+}
+
+message AddBannerToSlotRequest {
+  Banner banner = 1;
+  int64 slot_id = 2;
+}
+
+message AddBannerToSlotResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+message RemoveBannerFromSlotRequest {
+  Banner banner = 1;
+  int64 slot_id = 2;
+}
+
+message RemoveBannerFromSlotResponse {
+  bool success = 1;
+  string error = 2;
+}

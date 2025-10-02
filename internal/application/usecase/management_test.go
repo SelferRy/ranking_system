@@ -19,23 +19,23 @@ func TestManagementUseCase_AddBannerToSlot_HappyPath(t *testing.T) {
 
 	ctx := context.Background()
 	mockRepo := mocks.NewMockManagementRepository(ctrl)
-	uc := NewManagementUseCase(mockRepo)
-	uc.logger = logger.NewDefault()
+	logg := logger.NewDefault()
+	uc := NewManagementUseCase(logg, mockRepo)
 
-	bannerID := entity.BannerID(1)
+	banner := entity.Banner{ID: entity.BannerID(1), Description: "some"}
 	slotID := entity.SlotID(1)
 
 	// expectations
 	mockRepo.EXPECT().
-		BannerExistsInSlot(ctx, bannerID, slotID).
+		BannerExistsInSlot(ctx, banner.ID, slotID).
 		Return(false, nil)
 
 	mockRepo.EXPECT().
-		AddBannerToSlot(ctx, bannerID, slotID).
+		AddBannerToSlot(ctx, banner, slotID).
 		Return(nil)
 
 	// act
-	err := uc.AddBannerToSlot(ctx, bannerID, slotID)
+	err := uc.AddBannerToSlot(ctx, banner, slotID)
 
 	// assert
 	require.NoError(t, err)
@@ -47,19 +47,19 @@ func TestManagementUseCase_AddBannerToSlot_AlreadyExists(t *testing.T) {
 
 	ctx := context.Background()
 	mockRepo := mocks.NewMockManagementRepository(ctrl)
-	uc := NewManagementUseCase(mockRepo)
-	uc.logger = logger.NewDefault()
+	logg := logger.NewDefault()
+	uc := NewManagementUseCase(logg, mockRepo)
 
-	bannerID := entity.BannerID(1)
+	banner := entity.Banner{ID: entity.BannerID(1), Description: "some"}
 	slotID := entity.SlotID(1)
 
 	// expectations
 	mockRepo.EXPECT().
-		BannerExistsInSlot(ctx, bannerID, slotID).
+		BannerExistsInSlot(ctx, banner.ID, slotID).
 		Return(true, nil)
 
 	// act
-	err := uc.AddBannerToSlot(ctx, bannerID, slotID)
+	err := uc.AddBannerToSlot(ctx, banner, slotID)
 
 	// assert
 	require.NoError(t, err)
@@ -71,19 +71,20 @@ func TestManagementUseCase_AddBannerToSlot_ErrorOnExistsCheck(t *testing.T) {
 
 	ctx := context.Background()
 	mockRepo := mocks.NewMockManagementRepository(ctrl)
-	uc := NewManagementUseCase(mockRepo)
+	logg := logger.NewDefault()
+	uc := NewManagementUseCase(logg, mockRepo)
 	uc.logger = logger.NewDefault()
 
-	bannerID := entity.BannerID(1)
+	banner := entity.Banner{ID: entity.BannerID(1), Description: "some"}
 	slotID := entity.SlotID(1)
 
 	// expectations
 	mockRepo.EXPECT().
-		BannerExistsInSlot(ctx, bannerID, slotID).
+		BannerExistsInSlot(ctx, banner.ID, slotID).
 		Return(false, errors.New("db error"))
 
 	// act
-	err := uc.AddBannerToSlot(ctx, bannerID, slotID)
+	err := uc.AddBannerToSlot(ctx, banner, slotID)
 
 	// assert
 	require.Error(t, err)
@@ -96,23 +97,23 @@ func TestManagementUseCase_AddBannerToSlot_ErrorOnInsert(t *testing.T) {
 
 	ctx := context.Background()
 	mockRepo := mocks.NewMockManagementRepository(ctrl)
-	uc := NewManagementUseCase(mockRepo)
-	uc.logger = logger.NewDefault()
+	logg := logger.NewDefault()
+	uc := NewManagementUseCase(logg, mockRepo)
 
-	bannerID := entity.BannerID(1)
+	banner := entity.Banner{ID: entity.BannerID(1), Description: "some"}
 	slotID := entity.SlotID(1)
 
 	// expectations
 	mockRepo.EXPECT().
-		BannerExistsInSlot(ctx, bannerID, slotID).
+		BannerExistsInSlot(ctx, banner.ID, slotID).
 		Return(false, nil)
 
 	mockRepo.EXPECT().
-		AddBannerToSlot(ctx, bannerID, slotID).
+		AddBannerToSlot(ctx, banner, slotID).
 		Return(errors.New("insert failed"))
 
 	// act
-	err := uc.AddBannerToSlot(ctx, bannerID, slotID)
+	err := uc.AddBannerToSlot(ctx, banner, slotID)
 
 	// assert
 	require.Error(t, err)
@@ -125,19 +126,20 @@ func TestManagementUseCase_RemoveBannerFromSlot_HappyPath(t *testing.T) {
 
 	ctx := context.Background()
 	mockRepo := mocks.NewMockManagementRepository(ctrl)
-	uc := NewManagementUseCase(mockRepo)
+	logg := logger.NewDefault()
+	uc := NewManagementUseCase(logg, mockRepo)
 	uc.logger = logger.NewDefault()
 
-	bannerID := entity.BannerID(1)
+	banner := entity.Banner{ID: entity.BannerID(1), Description: "some"}
 	slotID := entity.SlotID(1)
 
 	// expectations
 	mockRepo.EXPECT().
-		RemoveBannerFromSlot(ctx, bannerID, slotID).
+		RemoveBannerFromSlot(ctx, banner, slotID).
 		Return(nil)
 
 	// act
-	err := uc.RemoveBannerFromSlot(ctx, bannerID, slotID)
+	err := uc.RemoveBannerFromSlot(ctx, banner, slotID)
 
 	// assert
 	require.NoError(t, err)
@@ -149,19 +151,20 @@ func TestManagementUseCase_RemoveBannerFromSlot_Error(t *testing.T) {
 
 	ctx := context.Background()
 	mockRepo := mocks.NewMockManagementRepository(ctrl)
-	uc := NewManagementUseCase(mockRepo)
+	logg := logger.NewDefault()
+	uc := NewManagementUseCase(logg, mockRepo)
 	uc.logger = logger.NewDefault()
 
-	bannerID := entity.BannerID(1)
+	banner := entity.Banner{ID: entity.BannerID(1), Description: "some"}
 	slotID := entity.SlotID(1)
 
 	// expectations
 	mockRepo.EXPECT().
-		RemoveBannerFromSlot(ctx, bannerID, slotID).
+		RemoveBannerFromSlot(ctx, banner, slotID).
 		Return(errors.New("delete failed"))
 
 	// act
-	err := uc.RemoveBannerFromSlot(ctx, bannerID, slotID)
+	err := uc.RemoveBannerFromSlot(ctx, banner, slotID)
 
 	// assert
 	require.Error(t, err)
